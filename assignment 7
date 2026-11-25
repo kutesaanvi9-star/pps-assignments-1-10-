@@ -1,0 +1,58 @@
+#include <stdio.h>
+
+#define MAX_STUDENTS 100
+#define NAME_LEN 50
+
+struct Student {
+    int rollNo;
+    char name[NAME_LEN];
+    float marks[3];
+    float total;
+    float percentage;
+};
+
+int main() {
+    int n, i, j;
+    struct Student s[MAX_STUDENTS];
+
+    printf("Enter the number of students: ");
+    if (scanf("%d", &n) != 1 || n <= 0 || n > MAX_STUDENTS) {
+        printf("Invalid number of students! Please enter a value between 1 and %d.\n", MAX_STUDENTS);
+        return 1;
+    }
+
+    for (i = 0; i < n; i++) {
+        printf("\n--- Enter details for Student %d ---\n", i + 1);
+        printf("Enter Roll Number: ");
+        scanf("%d", &s[i].rollNo);
+
+        printf("Enter Name: ");
+        scanf(" %49[^\n]", s[i].name); // reads full name including spaces
+
+        s[i].total = 0.0f;
+        for (j = 0; j < 3; j++) {
+            printf("Enter marks of Subject %d: ", j + 1);
+            scanf("%f", &s[i].marks[j]);
+            s[i].total += s[i].marks[j];
+        }
+
+        s[i].percentage = s[i].total / 3.0f;
+    }
+
+    printf("\n%-10s %-15s %-12s %-12s %-12s %-10s %-12s\n",
+           "Roll No", "Name", "Subject 1", "Subject 2", "Subject 3", "Total", "Percentage");
+    printf("----------------------------------------------------------------------------------------\n");
+
+    for (i = 0; i < n; i++) {
+        printf("%-10d %-15s %-12.0f %-12.0f %-12.0f %-10.0f %-12.2f\n",
+               s[i].rollNo,
+               s[i].name,
+               s[i].marks[0],
+               s[i].marks[1],
+               s[i].marks[2],
+               s[i].total,
+               s[i].percentage);
+    }
+
+    return 0;
+}
