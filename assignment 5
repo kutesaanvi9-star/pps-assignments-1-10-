@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 100
+
+// Helper function to read a line safely and remove trailing newline
+void readString(char str[], int size) {
+    if (fgets(str, size, stdin) != NULL) {
+        size_t len = strlen(str);
+        if (len > 0 && str[len - 1] == '\n') {
+            str[len - 1] = '\0';
+        }
+    }
+}
+
+// Function to reverse a string (portable across GCC/Linux)
+void reverseString(char str[]) {
+    int len = strlen(str);
+    for (int i = 0; i < len / 2; i++) {
+        char temp = str[i];
+        str[i] = str[len - 1 - i];
+        str[len - 1 - i] = temp;
+    }
+}
+
+int main() {
+    int choice;
+    char str1[MAX], str2[MAX], copy[MAX];
+
+    do {
+        printf("\n=== STRING OPERATIONS MENU ===\n");
+        printf("1. String Length (strlen)\n");
+        printf("2. String Copy (strcpy)\n");
+        printf("3. String Concatenation (strcat)\n");
+        printf("4. String Comparison (strcmp)\n");
+        printf("5. String Reverse\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+
+        if (scanf("%d", &choice) != 1) {
+            printf("Invalid input! Please enter a number.\n");
+            while (getchar() != '\n'); // clear invalid input
+            continue;
+        }
+        while (getchar() != '\n'); // clear leftover newline after scanf
+
+        switch (choice) {
+            case 1:
+                printf("Enter a string: ");
+                readString(str1, MAX);
+                printf("Length of \"%s\" is: %zu\n", str1, strlen(str1));
+                break;
+
+            case 2:
+                printf("Enter source string: ");
+                readString(str1, MAX);
+                strcpy(copy, str1);
+                printf("Copied string: %s\n", copy);
+                break;
+
+            case 3:
+                printf("Enter first string: ");
+                readString(str1, MAX);
+                printf("Enter second string: ");
+                readString(str2, MAX);
+                if (strlen(str1) + strlen(str2) < MAX) {
+                    strcat(str1, str2);
+                    printf("Concatenated string: %s\n", str1);
+                } else {
+                    printf("Error: Combined length exceeds buffer size (%d).\n", MAX - 1);
+                }
+                break;
+
+            case 4:
+                printf("Enter first string: ");
+                readString(str1, MAX);
+                printf("Enter second string: ");
+                readString(str2, MAX);
+                {
+                    int cmp = strcmp(str1, str2);
+                    if (cmp == 0) {
+                        printf("Both strings are equal.\n");
+                    } else if (cmp < 0) {
+                        printf("\"%s\" is lexicographically smaller than \"%s\".\n", str1, str2);
+                    } else {
+                        printf("\"%s\" is lexicographically greater than \"%s\".\n", str1, str2);
+                    }
+                }
+                break;
+
+            case 5:
+                printf("Enter a string: ");
+                readString(str1, MAX);
+                reverseString(str1);
+                printf("Reversed string: %s\n", str1);
+                break;
+
+            case 6:
+                printf("Exiting program. Goodbye!\n");
+                break;
+
+            default:
+                printf("Invalid choice! Please select between 1 and 6.\n");
+        }
+    } while (choice != 6);
+
+    return 0;
+}
